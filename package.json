@@ -1,5 +1,5 @@
 {
-  "name": "ethereum-auth",
+  "name": "metamask-auth",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RobinHung/ethereum-auth.git"
+    "url": "https://github.com/raedbensaid/login_metamask-.git"
   },
-  "author": "Robin Hung",
+  "author": "Raed Ben Said",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/RobinHung/ethereum-auth/issues"
+    "url": "https://github.com/raedbensaid/login_metamask-/issues"
   },
-  "homepage": "https://github.com/RobinHung/ethereum-auth#readme",
+  "homepage": "https://github.com/raedbensaid/login_metamask-",
   "dependencies": {
     "body-parser": "^1.19.0",
     "connect-mongo": "^3.1.2",
