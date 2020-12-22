@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <!--
+      <script
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"
+      ></script>
+    -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>Login page</title>
+    <style>
+      #eth {
+        background: #f6851b;
+        padding: 10px 10px;
+        display: inline-block;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <a class="navbar-brand" href="/">Metamask Auth</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/login"
+              >Login <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout"
+              >Logout <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/profile">Profile</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <br />
+
+    <div class="container">
+      <div class="text-center">
+        <h1></h1>
+        <br />
+        <!--
+          <a id="eth" onclick="ethClicked()">Login with Ethereum account</a>
+        -->
+        <button
+          type="button"
+          class="btn btn-large"
+          id="eth"
+          onclick="ethClicked()"
+        >
+          Login with Metamask
+        </button>
+      </div>
+    </div>
+    <div class="container">
+      <div class="text-center">
+        <h1></h1>
+  </div>
+</div>
+    <!-- <p><%= nonce %></p> -->
+
+    <!-- <h3 id="showSignature">signed message:</h3> -->
+  </body>
+
+  <script>
+    async function ethClicked() {
+      // $("#eth").load("/eth-login");
+      let signedMessage;
+
+      if (window.ethereum) {
+        window.web3 = new Web3(ethereum);
+        try {
+          await ethereum.enable();
+
+          console.log(web3.eth.coinbase);
+          await web3.personal.sign(
+            web3.fromUtf8(
+              // Message will be encoded in Hex
+              "You're about to sign this random string: '<%=nonce %>' to prove your identity."
+            ),
+            web3.eth.coinbase,
+            function(err, signature) {
+              // Callback function for `web3.personal.sign`
+              if (!err) {
+                signedMessage = signature;
+                console.log(signature);
+
+                $("#showSignature").append(signedMessage);
+
+                const userData = {
+                  address: web3.eth.coinbase,
+                  signature: signedMessage
+                };
+
+                $.post({
+                  traditional: true,
+                  url: "/submit",
+                  contentType: "application/json",
+                  data: JSON.stringify(userData),
+                  dataType: "json",
+                  success: function(response) {
+                    // @dev: NOT triggered!
+                    console.log(response.status);
+                    if (response.status == 200) {
+                      window.location.href = "/profile";
+                    }
+                  },
+                  complete: function(response) {
+                    // @dev: successfully triggered :)
+                    console.log(response.status);
+                    window.location.href = "/profile";
+                  }
+                });
+              } else {
+                // error occurs!
+                console.log("WHY cancel the signing request ");
+              }
+            }
+          );
+        } catch {
+          console.log(" some error occured!");
+        }
+      } else {
+        console.log("No Web3 provider detected!");
+      }
+    }
+  </script>
+</html>
