@@ -7,24 +7,12 @@ const sigUtil = require("eth-sig-util");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-//const keys = require("./config/keys");
 const logger = require("morgan");
 const User = require("./models/user-model");
 const MongoStore = require("connect-mongo")(session);
 require('dotenv').config();
 var passport = require('passport');
 var Strategy = require('passport-twitter').Strategy;
-
-// const web3 = new Web3(
-//   Web3.givenProvider ||
-//     "https://rinkeby.infura.io/v3/65cb4e0a0f0440b7b5b7512b70fab1a7"
-// );
-
-// const web3 = new Web3(
-//   new Web3.providers.HttpProvider(
-//     "https://mainnet.infura.io/v3/65cb4e0a0f0440b7b5b7512b70fab1a7"
-//   )
-// );
 
 const web3 = new Web3(
   new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws")
@@ -126,7 +114,7 @@ app.post("/submit", (req, res) => {
         console.log("Found user: " + currentUser);
 
         currentUser.loginCount += 1;
-        // TODO: update nonce
+        //  update nonce
 
         currentUser.save((err, updatedUser) => {
           // after login() function, will call `serializeUser()`
