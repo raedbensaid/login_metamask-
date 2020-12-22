@@ -13,13 +13,10 @@ const MongoStore = require("connect-mongo")(session);
 require('dotenv').config();
 var passport = require('passport');
 var Strategy = require('passport-twitter').Strategy;
-
 const web3 = new Web3(
   new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws")
 );
-
 const app = express();
-
 let userData;
 let tempNonce;
 let loginStatus = false;
